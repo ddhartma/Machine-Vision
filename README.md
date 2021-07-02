@@ -67,7 +67,7 @@ Overview of Machine Vision techniques.
 - [Acknowledgments](#Acknowledgments)
 - [Further Links](#Further_Links)
 
-# Convolutional Neural Networks <a name="conv_nero_net"></a>
+# Convolutional Neural Networks <a id="conv_nero_net"></a>
 - Example:
 
     ![image1]
@@ -76,7 +76,7 @@ Overview of Machine Vision techniques.
     - Such a net enables to analyse **space localized patterns**
     - Therefore such nets are the core of Computer Vision applications.
 
-## Convolutional layers <a name="conv_layers"></a>
+## Convolutional layers <a id="conv_layers"></a>
 - Convolutional layers consist of groups of kernels.
 
     ![image3]
@@ -117,14 +117,14 @@ Overview of Machine Vision techniques.
     - they keep the 2D strucure of the image
     - they reduce number of parameters to learn
 
-## Rule of thumb for Convolutional layer implementation <a name="rule"></a> 
+## Rule of thumb for Convolutional layer implementation <a id="rule"></a> 
 
 - A larger amount of kernels allows to identify complexer features.
 - More kernels, however, need more computational power.
 - The optimal amount of kernels can vary from layer to layer. Often it is better to implement more kernels in deeper layers than in early layers.
 - Try to keep computational power as low as possible. Use the lowest possible amount of kernels. Always try to make the model only as complex as needed. 
 
-## Difference between MLPs and CNNs <a name="diff_mlp_cnn"></a>
+## Difference between MLPs and CNNs <a id="diff_mlp_cnn"></a>
 | Multi-Layer-Perceptrons (MLPs)| ConvNet |
 |--- |--- |
 | only fully connected layers| local connected layers|
@@ -133,7 +133,7 @@ Overview of Machine Vision techniques.
 | possibly millions of parameters| parameter amount can be reduced |
 | possibly overfitting | less susceptible to overfitting|
 
-## Computational complexity <a name="comp_complex"></a>
+## Computational complexity <a id="comp_complex"></a>
 | Multi-Layer-Perceptrons (MLPs)| ConvNet |
 |--- |--- |
 | Example: image 200x200 pixel, RGB (= 3 channels)| |
@@ -143,23 +143,23 @@ Overview of Machine Vision techniques.
 
     ![image2]
 
-## Hyperparameters of Convolutional kernels <a name="conv_kernel"></a>
+## Hyperparameters of Convolutional kernels <a id="conv_kernel"></a>
 - There are three hyperparameters
     - Kernel size
     - Stride
     - Padding
 
-### Kernel Size <a name="kernel_size"></a>
+### Kernel Size <a id="kernel_size"></a>
 - Useful standard for Machine Vision: 3x3
 - Also famous: 5x5, 7x7
 
-### Stride <a name="stride"></a>
+### Stride <a id="stride"></a>
 - Number of pixel steps when the kernel moves
 - Standard: 1
 - Sometimes: 2
 - A larger stride reduces computational power, higher speed (less calculations) 
 
-### Padding <a name="padding"></a>
+### Padding <a id="padding"></a>
 - Add zeros to horizontal/vertical axis to keep the original size of the image after convolution.
 - Example: 
     - Input Image 28x28, 
@@ -178,7 +178,7 @@ Overview of Machine Vision techniques.
     - **P** = number of horizonal/vertical zeros (Padding)
     - **S** = Stride 
 
-## Pooling Layers <a name="pooling_layers"></a> 
+## Pooling Layers <a id="pooling_layers"></a> 
 - Used in combination with Convolutional layers
 - Used to reduce number of parameters and network complexity
 - They speed up calculations (training)
@@ -192,7 +192,7 @@ Overview of Machine Vision techniques.
 
     ![image7]
 
-### Construction <a name="pooling_construct"></a>
+### Construction <a id="pooling_construct"></a>
 - Kernel, typically 2x2 
 - Stride, typically 2
 - --> Pooling layer evaluates at each position 4 activations but keeps only the maximum value. 
@@ -201,33 +201,33 @@ Overview of Machine Vision techniques.
     - Input: 28x28x16 (16 filter)
     - Output 14x14x16
 
-### Aim of Convolutional and Pooling layers <a name="aim_conv_pool"></a>
+### Aim of Convolutional and Pooling layers <a id="aim_conv_pool"></a>
 - Control depth and spatial dimensions 
 
     ![image8]
 
 # State of the art ConvNets <a id="state_of_art"></a>
-## LeNet <a name="lenet"></a> 
-## AlexNet <a name="alexnet"></a> 
-## VGGNet <a name="vggnet"></a> 
-## ResNet <a name="resnet"></a> 
-## Object detection <a name="object_detection"></a> 
-### R-CNN <a name="r_cnn"></a> 
-### Fast R-CNN <a name="fast_r_cnn"></a> 
-### Faster R-CNN <a name="faster_r_cnn"></a> 
-### YOLO <a name="yolo"></a> 
-## Picture Segmentation <a name="pic_seg"></a> 
-### Mask R-CNN <a name="mask_r_cnn"></a> 
-### U-Net <a name="u_net"></a> 
-## Transfer Learning <a name="trans_learn"></a> 
-## Capsule Networks <a name="caps_net"></a>  
+## LeNet <a id="lenet"></a> 
+## AlexNet <a id="alexnet"></a> 
+## VGGNet <a id="vggnet"></a> 
+## ResNet <a id="resnet"></a> 
+## Object detection <a id="object_detection"></a> 
+### R-CNN <a id="r_cnn"></a> 
+### Fast R-CNN <a id="fast_r_cnn"></a> 
+### Faster R-CNN <a id="faster_r_cnn"></a> 
+### YOLO <a id="yolo"></a> 
+## Picture Segmentation <a id="pic_seg"></a> 
+### Mask R-CNN <a id="mask_r_cnn"></a> 
+### U-Net <a id="u_net"></a> 
+## Transfer Learning <a id="trans_learn"></a> 
+## Capsule Networks <a id="caps_net"></a>  
 
-## Setup Instructions <a name="Setup_Instructions"></a>
+## Setup Instructions <a id="Setup_Instructions"></a>
 The following is a brief set of instructions on setting up a cloned repository.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites: Installation of Python via Anaconda and Command Line Interaface <a name="Prerequisites"></a>
+### Prerequisites: Installation of Python via Anaconda and Command Line Interaface <a id="Prerequisites"></a>
 - Install [Anaconda](https://www.anaconda.com/distribution/). Install Python 3.7 - 64 Bit
 
 - Upgrade Anaconda via
@@ -241,7 +241,7 @@ $ conda upgrade --all
 $ export PATH="/path/to/anaconda/bin:$PATH"
 ```
 
-### Clone the project <a name="Clone_the_project"></a>
+### Clone the project <a id="Clone_the_project"></a>
 - Open your Command Line Interface
 - Change Directory to your project older, e.g. `cd my_github_projects`
 - Clone the Github Project inside this folder with Git Bash (Terminal) via:
@@ -256,7 +256,7 @@ $ cd Matrix-Math-with-Numpy
 
 - Create a new Python environment, e.g. matrix_op. Inside Git Bash (Terminal) write:
 ```
-$ conda create --name matrix_op
+$ conda create --id matrix_op
 ```
 
 - Activate the installed environment via
@@ -277,10 +277,10 @@ seaborn = 0.8.1
 $ conda env list
 ```
 
-## Acknowledgments <a name="Acknowledgments"></a>
+## Acknowledgments <a id="Acknowledgments"></a>
 * This project is part of the Udacity Nanodegree program 'Deep Reinforcement Learning'. Please check this [link](https://www.udacity.com) for more information.
 
-## Further Links <a name="Further_Links"></a>
+## Further Links <a id="Further_Links"></a>
 
 Git/Github
 * [GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html)
