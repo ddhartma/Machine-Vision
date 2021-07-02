@@ -210,9 +210,356 @@ Overview of Machine Vision techniques.
     ![image8]
 
 # State of the art ConvNets <a id="state_of_art"></a>
+In the following some important ConvNets will be presented.
 ## LeNet <a id="lenet"></a> 
+- Originally from 1998
+- Here LeNet with some modern implementations due to more computational power in these days
+- Open Jupyter Notebook ```lenet_in_keras.ipynb```
+    ### Load dependencies
+    ```
+    import keras
+    from keras.datasets import mnist
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout
+    from keras.layers import Flatten, Conv2D, MaxPooling2D # new!
+    ```
+    ### Load data
+    ```
+    (X_train, y_train), (X_valid, y_valid) = mnist.load_data()
+    ```
+    ### Preprocess Data
+    ```
+    X_train = X_train.reshape(60000, 28, 28, 1).astype('float32')
+    X_valid = X_valid.reshape(10000, 28, 28, 1).astype('float32')
+
+    X_train /= 255
+    X_valid /= 255
+
+    n_classes = 10
+    y_train = keras.utils.to_categorical(y_train, n_classes)
+    y_valid = keras.utils.to_categorical(y_valid, n_classes)
+    ```
+    ### Design neural network architecture
+    ```
+    model = Sequential()
+
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1)))
+
+    model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
+
+    model.add(Dense(n_classes, activation='softmax'))
+    ```
+    ```
+    model.summary()
+
+    RESULTS:
+    ------------
+    _________________________________________________________________
+    Layer (type)                 Output Shape              Param #   
+    =================================================================
+    conv2d_1 (Conv2D)            (None, 26, 26, 32)        320       
+    _________________________________________________________________
+    conv2d_2 (Conv2D)            (None, 24, 24, 64)        18496     
+    _________________________________________________________________
+    max_pooling2d_1 (MaxPooling2 (None, 12, 12, 64)        0         
+    _________________________________________________________________
+    dropout_1 (Dropout)          (None, 12, 12, 64)        0         
+    _________________________________________________________________
+    flatten_1 (Flatten)          (None, 9216)              0         
+    _________________________________________________________________
+    dense_1 (Dense)              (None, 128)               1179776   
+    _________________________________________________________________
+    dropout_2 (Dropout)          (None, 128)               0         
+    _________________________________________________________________
+    dense_2 (Dense)              (None, 10)                1290      
+    =================================================================
+    Total params: 1,199,882
+    Trainable params: 1,199,882
+    Non-trainable params: 0
+    ```
+    ### Configure model
+    ```
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    ```
+    ### Train
+    ```
+    model.fit(X_train, y_train, batch_size=128, epochs=10, verbose=1, validation_data=(X_valid, y_valid))
+
+    RESULTS:
+    ------------
+    ...
+    Epoch 10/10
+    60000/60000 [==============================] - 39s 655us/step - loss: 0.0264 - acc: 0.9914 - val_loss: 0.0291 - val_acc: 0.9919
+    ```
+    **Structure**:
+    - Input: MNIST 28x28
+    - Two Conv layers (1st: 32 filter, to learn simple features, 2nd: 64 filter, to learn more complex feature combinations)
+    - kernel_size: 3x3
+    - ReLu as activation
+    - Stride: 1
+    - Padding: valid (--> means: no Padding, shrinkage of original image)
+    - Output of 1st Conv layer: 26x26x32
+    - Output of 1st Conv layer: 24x24x64
+    - MaxPooling2D to reduce spatial dimensions (and hence computational power), kernel: 2x2, Stride: 2
+    - Output of MaxPooling2D: 12x12x64 
+    - Dropout to reduce risk of overfitting
+    - Flatten --> Convert 3D activation map into a 1D array, 9216 neuron (12x12x64)
+    - Two Dense layers to prepare output, 1st dense layer with 128 neurons, 2nd dense layer with 10 neurons, used to learn to assign representations to classes
+    - Softmax-output at the end
+
+    **Parameters**:
+    - conv2d_1: 320 params
+        - 288 weights: 32 filter x 9 weights (from 3x3 kernel * 1 channel) 
+        - 32 Bias, one for each filter
+    - conv2d_2: 18.496 params
+        - 18.432 weights: 64 filter x 9 weights per filter (32 in total from previous layer) 
+        - 64 Bias, one for each filter
+    - dense_1: 1.179.648 params
+        - 9216 inputs from reduced activation map of the previous layer x 128 neurons of this layer
+        - 128 Bias, one for each neuron
+    - dense_2: 1290 params
+        - 128 inputs from reduced activation map of the previous layer x 10 neurons of this layer
+        - 10 Bias, one for each neuron
+    
+    Prinicipal structure based on LeNet:
+
+    ![image9]
+
 ## AlexNet <a id="alexnet"></a> 
+- Open Jupyter Notebook ```alexnet_in_keras.ipynb```
+    ### Load dependencies
+    ```
+    import keras
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+    from keras.layers.normalization import BatchNormalization
+    ```
+    ### Load data
+    ```
+    import tflearn.datasets.oxflower17 as oxflower17
+    X, Y = oxflower17.load_data(one_hot=True)
+    ```
+    ### Design neural network architecture
+    ```
+    model = Sequential()
+
+    model.add(Conv2D(96, kernel_size=(11, 11), strides=(4, 4), activation='relu', input_shape=(224, 224, 3)))
+    model.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
+    model.add(BatchNormalization())
+
+    model.add(Conv2D(256, kernel_size=(5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
+    model.add(BatchNormalization())
+
+    model.add(Conv2D(256, kernel_size=(3, 3), activation='relu'))
+    model.add(Conv2D(384, kernel_size=(3, 3), activation='relu'))
+    model.add(Conv2D(384, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
+    model.add(BatchNormalization())
+
+    model.add(Flatten())
+    model.add(Dense(4096, activation='tanh'))
+    model.add(Dropout(0.5))
+    model.add(Dense(4096, activation='tanh'))
+    model.add(Dropout(0.5))
+
+    model.add(Dense(17, activation='softmax'))
+    ```
+    ```
+    model.summary()
+
+    RESULTS:
+    ------------
+    _________________________________________________________________
+    Layer (type)                 Output Shape              Param #   
+    =================================================================
+    conv2d_1 (Conv2D)            (None, 54, 54, 96)        34944     
+    _________________________________________________________________
+    max_pooling2d_1 (MaxPooling2 (None, 26, 26, 96)        0         
+    _________________________________________________________________
+    batch_normalization_1 (Batch (None, 26, 26, 96)        384       
+    _________________________________________________________________
+    conv2d_2 (Conv2D)            (None, 22, 22, 256)       614656    
+    _________________________________________________________________
+    max_pooling2d_2 (MaxPooling2 (None, 10, 10, 256)       0         
+    _________________________________________________________________
+    batch_normalization_2 (Batch (None, 10, 10, 256)       1024      
+    _________________________________________________________________
+    conv2d_3 (Conv2D)            (None, 8, 8, 256)         590080    
+    _________________________________________________________________
+    conv2d_4 (Conv2D)            (None, 6, 6, 384)         885120    
+    _________________________________________________________________
+    conv2d_5 (Conv2D)            (None, 4, 4, 384)         1327488   
+    _________________________________________________________________
+    max_pooling2d_3 (MaxPooling2 (None, 1, 1, 384)         0         
+    _________________________________________________________________
+    batch_normalization_3 (Batch (None, 1, 1, 384)         1536      
+    _________________________________________________________________
+    flatten_1 (Flatten)          (None, 384)               0         
+    _________________________________________________________________
+    dense_1 (Dense)              (None, 4096)              1576960   
+    _________________________________________________________________
+    dropout_1 (Dropout)          (None, 4096)              0         
+    _________________________________________________________________
+    dense_2 (Dense)              (None, 4096)              16781312  
+    _________________________________________________________________
+    dropout_2 (Dropout)          (None, 4096)              0         
+    _________________________________________________________________
+    dense_3 (Dense)              (None, 17)                69649     
+    =================================================================
+    Total params: 21,883,153
+    Trainable params: 21,881,681
+    Non-trainable params: 1,472
+    ```
+    ### Configure model
+    ```
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    ```
+    ### Train
+    ```
+    model.fit(X, Y, batch_size=64, epochs=100, verbose=1, validation_split=0.1, shuffle=True)
+
+    RESULTS:
+    ------------
+    Train on 1224 samples, validate on 136 samples
+    Epoch 1/100
+    1224/1224 [==============================] - 21s 17ms/step - loss: 4.5644 - acc: 0.2092 - val_loss: 7.3530 - val_acc: 0.1691
+    ...
+    ```
+    Key points:
+    - Input images: 224x224, RGB --> 3 color channels considered via input_shape of conv2d_1
+    - conv2d_1 has a large kernel_size = 11x11
+    - Dropout is only used in for the fully connected layers near the output. Idea: Conv layers are less susceptible for overfitting than fully connected layers.
+
+    ![image10]
+
 ## VGGNet <a id="vggnet"></a> 
+- VGGNet is similar to AlexNet 
+- Main difference: VGGNet has **more Conv-Pool-Blocks** than AlexNet
+- Open Jupyter Notebook ```vggnet_in_keras.ipynb```
+    ### Load and prepare 
+    ```
+    ... (see notebook)
+    ```
+    ### Design neural network architecture
+    ```
+    model = Sequential()
+
+    model.add(Conv2D(64, 3, activation='relu', input_shape=(224, 224, 3)))
+    model.add(Conv2D(64, 3, activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+    model.add(BatchNormalization())
+
+    model.add(Conv2D(128, 3, activation='relu'))
+    model.add(Conv2D(128, 3, activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+    model.add(BatchNormalization())
+
+    model.add(Conv2D(256, 3, activation='relu'))
+    model.add(Conv2D(256, 3, activation='relu'))
+    model.add(Conv2D(256, 3, activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+    model.add(BatchNormalization())
+
+    model.add(Conv2D(512, 3, activation='relu'))
+    model.add(Conv2D(512, 3, activation='relu'))
+    model.add(Conv2D(512, 3, activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+    model.add(BatchNormalization())
+
+    model.add(Conv2D(512, 3, activation='relu'))
+    model.add(Conv2D(512, 3, activation='relu'))
+    model.add(Conv2D(512, 3, activation='relu'))
+    model.add(MaxPooling2D(2, 2))
+    model.add(BatchNormalization())
+
+    model.add(Flatten())
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+
+    model.add(Dense(17, activation='softmax'))
+    ```
+    ```
+    model.summary() 
+
+    RESULTS:
+    ------------
+    _________________________________________________________________
+    Layer (type)                 Output Shape              Param #   
+    =================================================================
+    conv2d_1 (Conv2D)            (None, 222, 222, 64)      1792      
+    _________________________________________________________________
+    conv2d_2 (Conv2D)            (None, 220, 220, 64)      36928     
+    _________________________________________________________________
+    max_pooling2d_1 (MaxPooling2 (None, 110, 110, 64)      0         
+    _________________________________________________________________
+    batch_normalization_1 (Batch (None, 110, 110, 64)      256       
+    _________________________________________________________________
+    conv2d_3 (Conv2D)            (None, 108, 108, 128)     73856     
+    _________________________________________________________________
+    conv2d_4 (Conv2D)            (None, 106, 106, 128)     147584    
+    _________________________________________________________________
+    max_pooling2d_2 (MaxPooling2 (None, 53, 53, 128)       0         
+    _________________________________________________________________
+    batch_normalization_2 (Batch (None, 53, 53, 128)       512       
+    _________________________________________________________________
+    conv2d_5 (Conv2D)            (None, 51, 51, 256)       295168    
+    _________________________________________________________________
+    conv2d_6 (Conv2D)            (None, 49, 49, 256)       590080    
+    _________________________________________________________________
+    conv2d_7 (Conv2D)            (None, 47, 47, 256)       590080    
+    _________________________________________________________________
+    max_pooling2d_3 (MaxPooling2 (None, 23, 23, 256)       0         
+    _________________________________________________________________
+    batch_normalization_3 (Batch (None, 23, 23, 256)       1024      
+    _________________________________________________________________
+    conv2d_8 (Conv2D)            (None, 21, 21, 512)       1180160   
+    _________________________________________________________________
+    conv2d_9 (Conv2D)            (None, 19, 19, 512)       2359808   
+    _________________________________________________________________
+    conv2d_10 (Conv2D)           (None, 17, 17, 512)       2359808   
+    _________________________________________________________________
+    max_pooling2d_4 (MaxPooling2 (None, 8, 8, 512)         0         
+    _________________________________________________________________
+    batch_normalization_4 (Batch (None, 8, 8, 512)         2048      
+    _________________________________________________________________
+    conv2d_11 (Conv2D)           (None, 6, 6, 512)         2359808   
+    _________________________________________________________________
+    conv2d_12 (Conv2D)           (None, 4, 4, 512)         2359808   
+    _________________________________________________________________
+    conv2d_13 (Conv2D)           (None, 2, 2, 512)         2359808   
+    _________________________________________________________________
+    max_pooling2d_5 (MaxPooling2 (None, 1, 1, 512)         0         
+    _________________________________________________________________
+    batch_normalization_5 (Batch (None, 1, 1, 512)         2048      
+    _________________________________________________________________
+    flatten_1 (Flatten)          (None, 512)               0         
+    _________________________________________________________________
+    dense_1 (Dense)              (None, 4096)              2101248   
+    _________________________________________________________________
+    dropout_1 (Dropout)          (None, 4096)              0         
+    _________________________________________________________________
+    dense_2 (Dense)              (None, 4096)              16781312  
+    _________________________________________________________________
+    dropout_2 (Dropout)          (None, 4096)              0         
+    _________________________________________________________________
+    dense_3 (Dense)              (None, 17)                69649     
+    =================================================================
+    Total params: 33,672,785
+    Trainable params: 33,669,841
+    Non-trainable params: 2,944
+    ```
+
+    ![image11]
+
 ## ResNet <a id="resnet"></a> 
 ## Object detection <a id="object_detection"></a> 
 ### R-CNN <a id="r_cnn"></a> 
