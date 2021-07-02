@@ -103,14 +103,14 @@ Overview of Machine Vision techniques.
     ![image5]
 
     In case of early Conv-layers:
-    - detection of simple features like edges. Those filters operate like markers, each for a certain feature
+    - Detection of simple features like edges. Those filters operate like markers, each for a certain feature
     - One filter for horizontal edges
     - One filter for vertical edges 
     - One filter for color transitions
     - etc. 
 
     In case of deeper Conv-layers:
-    - complexer combinations of simple features (like textures and certain shapes, forms)
+    - More complex combinations of simple features (like textures and certain shapes, forms)
 
     Near output:
     - Those Conv-layers could detect whole objects
