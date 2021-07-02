@@ -47,6 +47,22 @@ Overview of Machine Vision techniques.
     - [Pooling Layers](#pooling_layers) 
         - [Construction](#pooling_construct)
         - [Aim of Convolutional and Pooling layers](#aim_conv_pool)
+- [State of the art ConvNets](#state_of_art)
+    - [LeNet](#lenet)
+    - [AlexNet](#alexnet)
+    - [VGGNet](#vggnet)
+    - [ResNet](#resnet)
+    - [Object detection](#object_detection)
+        - [R-CNN](#r_cnn)
+        - [Fast R-CNN](#fast_r_cnn)
+        - [Faster R-CNN](#faster_r_cnn)
+        - [YOLO](#yolo)
+    - [Picture Segmentation](#pic_seg)
+        - [Mask R-CNN](#mask_r_cnn)
+        - [U-Net](#u_net)
+    - [Transfer Learning](#trans_learn)
+    - [Capsule Networks](#caps_net)    
+
 - [Setup Instructions](#Setup_Instructions)
 - [Acknowledgments](#Acknowledgments)
 - [Further Links](#Further_Links)
@@ -189,6 +205,22 @@ Overview of Machine Vision techniques.
 - Control depth and spatial dimensions 
 
     ![image8]
+
+# State of the art ConvNets <a id="state_of_art"></a>
+## LeNet <a name="lenet"></a> 
+## AlexNet <a name="alexnet"></a> 
+## VGGNet <a name="vggnet"></a> 
+## ResNet <a name="resnet"></a> 
+## Object detection <a name="object_detection"></a> 
+### R-CNN <a name="r_cnn"></a> 
+### Fast R-CNN <a name="fast_r_cnn"></a> 
+### Faster R-CNN <a name="faster_r_cnn"></a> 
+### YOLO <a name="yolo"></a> 
+## Picture Segmentation <a name="pic_seg"></a> 
+### Mask R-CNN <a name="mask_r_cnn"></a> 
+### U-Net <a name="u_net"></a> 
+## Transfer Learning <a name="trans_learn"></a> 
+## Capsule Networks <a name="caps_net"></a>  
 
 ## Setup Instructions <a name="Setup_Instructions"></a>
 The following is a brief set of instructions on setting up a cloned repository.
