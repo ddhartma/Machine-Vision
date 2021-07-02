@@ -89,6 +89,8 @@ Overview of Machine Vision techniques.
     - Typical kernel sizes: 3x3 or 5x5
     - Example: 3x3 kernel --> parameters to learn: 9 weights  + 1 bias
 
+- Jason Yosinski - [Visualize what kernels are doing](https://www.youtube.com/watch?v=AgkfIQ4IGaM)
+
 - In case of RGB: Each filter exists for each color channel
 
     ![image4]
@@ -294,6 +296,7 @@ Docstrings, DRY, PEP8
 
 Important web sites - Deep Learning
 * Deep Learning - illustriert - [GitHub Repo](https://github.com/the-deep-learners/deep-learning-illustrated)
+* Jason Yosinski - [Visualize what kernels are doing](https://www.youtube.com/watch?v=AgkfIQ4IGaM)
 
 Further Resources
 * Read about the [WaveNet](https://deepmind.com/blog/article/wavenet-generative-model-raw-audio) model. Why train an A.I. to talk, when you can train it to sing ;)? In April 2017, researchers used a variant of the WaveNet model to generate songs. The original paper and demo can be found [here](https://arxiv.org/pdf/1609.03499.pdf).
