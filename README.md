@@ -90,6 +90,7 @@ Overview of Machine Vision techniques.
     - Example: 3x3 kernel --> parameters to learn: 9 weights  + 1 bias
 
 - Jason Yosinski - [Visualize what kernels are doing](https://www.youtube.com/watch?v=AgkfIQ4IGaM)
+- [Code and more info](https://yosinski.com/deepvis)
 
 - In case of RGB: Each filter exists for each color channel
 
