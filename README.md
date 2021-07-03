@@ -561,6 +561,30 @@ In the following some important ConvNets will be presented.
     ![image11]
 
 ## ResNet <a id="resnet"></a> 
+- ResNet architectures help to reduce the risk of **Vanishing Gradients**
+- Vanishing Gradients are remarkable for deep architectures
+- Reason: Parameter of earl layers are far away from cost function (source for gradients which will transported backward through the network)
+- Early layers (needed for simple feature detection) are difficult to train.
+
+### Identity functions
+- If new layers execute an identity check (reproduction of results from earlier layers) training error does not increase.
+- However, often new layers have problems to execute this check. Hence, new layers could reduce the performance.
+
+### Idea of ResNets:
+- Residual networks have residual connections which exist in so called **residual blocks**.
+- Residual blocks are based on a sequence like Convolution layers, Batchnormalization and ReLU activation which will be finalized by a residual connection.
+- Input to residual block: a<sub>i-1</sub>.
+- Output from residual block (w/o residual connection): a<sub>i</sub>.
+- Output from residual block (with residual connection): y<sub>i</sub> = a<sub>i</sub> + a<sub>i-1</sub>.
+- **If activation from residual block a<sub>i</sub> = 0 (no learning effect), then the final output is the original input,  y<sub>i</sub> = a<sub>i-1</sub>**
+- **Hence, in that way a residual block is an identity function. A residual block learns something useful and rdcuces the error or it does noting (identity function)**. Residual connections are also called **skip connections**. --> **Neutral or better** property.
+- The risk of Vanishing Gradient problems can be reduced in that way.
+
+    ![image12]
+
+    ![image13]
+
+
 ## Object detection <a id="object_detection"></a> 
 ### R-CNN <a id="r_cnn"></a> 
 ### Fast R-CNN <a id="fast_r_cnn"></a> 
