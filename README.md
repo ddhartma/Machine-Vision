@@ -584,8 +584,31 @@ In the following some important ConvNets will be presented.
 
     ![image13]
 
+### ResNet from Microsoft Research
+- Developed by Microsoft research
+- Winner at ILSVRC 215
+- Used for 
+    - image classification
+    - object classification
+    - image segmentation
+- Used with COCO data set
+- Gaining more information from data via deeper architectures
 
 ## Object detection <a id="object_detection"></a> 
+- Before we studied image classification
+- Now et's focus on 
+    - object detection
+    - image segmentation
+
+    ![image14]
+    Abb. 10-13
+
+    - First object detection detects objects with boundary boxes
+    - Image segmentation
+        - Semantic segmentation: identifies all object of a certain class
+        - Instance segmentation: identifies all instances of one class 
+
+
 ### R-CNN <a id="r_cnn"></a> 
 ### Fast R-CNN <a id="fast_r_cnn"></a> 
 ### Faster R-CNN <a id="faster_r_cnn"></a> 
