@@ -582,8 +582,6 @@ In the following some important ConvNets will be presented.
 
     ![image12]
 
-    ![image13]
-
 ### ResNet from Microsoft Research
 - Developed by Microsoft research
 - Winner at ILSVRC 215
@@ -599,9 +597,8 @@ In the following some important ConvNets will be presented.
     - object detection
     - image segmentation
 
-    ![image14]
-    Abb. 10-13
-
+    ![image13]
+   
     - First **object detection** detects objects with boundary boxes
         - Identifies location of objects in an image
         - image classification
@@ -613,7 +610,17 @@ In the following some important ConvNets will be presented.
     1. An interesting region will be identified
     2. Automatic feature extraction in this region
     3. Classification of this region
-- Exampls: R-CNN, Fast R-CNN, Faster R C-NN, YOLO
+- Examples: R-CNN, Fast R-CNN, Faster R C-NN, YOLO
+
+- Interseting reference: [R-CNN, Fast R-CNN, Faster R-CNN, YOLO — Object Detection Algorithms](https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e)
+
+- Recent publications
+    * [R. Girshick et al, arXiv:1311.2524v5, 2014, Rich feature hierarchies for accurate object detection and semantic segmentation](https://arxiv.org/pdf/1311.2524.pdf)
+    * [R. Girshick et al., arXiv:1504.08083v2, 2015, Fast R-CNN](https://arxiv.org/pdf/1504.08083.pdf)
+    * [Shaoqing Ren et al., arXiv:1506.01497v3, 2016, Faster R-CNN: Towards Real-Time ObjectDetection with Region Proposal Networks](https://arxiv.org/pdf/1506.01497.pdf)
+    * [J. Redmon et al., 2016, arXiv:1506.02640v5, You Only Look Once:Unified, Real-Time Object Detection](https://arxiv.org/pdf/1506.02640v5.pdf)
+    * [Fei-Fei Li et al. 2017, Lecture 11:Detection and Segmentation](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf)
+    * [Kaiming He et al., 2018, arXiv:1703.06870v3, Mask R-CNN](https://arxiv.org/pdf/1703.06870.pdf)
 
 ### R-CNN <a id="r_cnn"></a> 
 - From 2013 (Ross Girshnick, UC Berkeley)
@@ -627,6 +634,8 @@ In the following some important ConvNets will be presented.
     - inflexible, only one input image size
     - slow, high computing effort (multi steps process see above)
 
+    ![image15]
+
 ### Fast R-CNN <a id="fast_r_cnn"></a> 
 - From 2015 (Ross Girshnick, UC Berkeley)
 - In normal R-CNN: In step 2 the CNN algorithm runs through multiple times for each ROI --> Unnecessary step
@@ -637,6 +646,8 @@ In the following some important ConvNets will be presented.
         - A Softmax probability over object classes
         - A boundary box regressor (to refine the location of ROI)
 - Main benefit over R-CNN: **Feature extraction only one time** --> faster, reduction of computational effort, simpler architecture
+
+    ![image16]
 
 ### Faster R-CNN <a id="faster_r_cnn"></a> 
 - from 2015 (Shaoqing Ren, Microsoft Research)
@@ -649,11 +660,7 @@ In the following some important ConvNets will be presented.
     - Hence, You can now identify **what** is on that image and **where** it is.
 - Benefit: Only one CNN for object detection and classification. --> faster, further reduction of computational effort than for Fast R-CNN.
 
-    ![image15]
-    Abb. 10-6
-
-    ![image16]
-    Abb. 10-14
+    ![image17]
 
 ### YOLO <a id="yolo"></a> 
 - from 2015 (Joseph Redmon)
@@ -672,11 +679,161 @@ In the following some important ConvNets will be presented.
     - YOLO9000: improvements in speed and modeling accuracy
     - Yolov3: further improvement in speed and accuracy
 
+    ![image18]
+
 ## Image Segmentation <a id="pic_seg"></a> 
+- **Pixel resolved detection** of objects 
+- Two prominent representatives:
+    - Mask R-CNN
+    - U-Net
+
 ### Mask R-CNN <a id="mask_r_cnn"></a> 
+- from 2017, developed by Facebook AI Research (FAIR)
+- Recent publication: [Kaiming He et al., 2018, arXiv:1703.06870v3, Mask R-CNN](https://arxiv.org/pdf/1703.06870.pdf)
+
+    ![image19]
+
+- Main steps:
+    - Use an exisitng Faster R-CNN architecture to propose ROIs.
+    - Use a ROI classificator to classify the objects. Simultaneously, use this classificator to refine boundary boxes.
+    - Use the boundary box to detect parts from the feature maps, which correspond to those parts of the image.
+    - Transfer these ROI feature maps in a complete ConvNet. It outputs a mask which marks the pixels which belong to the image. Object pixels will be set to 1. Non object pixels will be set to 0.  
+
 ### U-Net <a id="u_net"></a> 
+- from 2015, R. Ronneberger (University Freiburg)
+- Image segmentation of biomedical images. 
+- It sconsists of a complete Convolutional architecture. 
+    - Starts with a **contracting path**, multiple Conv and Maxpolling layers. Feature activation maps get smaller but deeper
+    - Then there is an **expanding path**, multiple upsampling and convolutional steps which transform feature activation maps back to original resolution.
+    - Contracting and expanding path are symmetric. During the contracting path the model learns to extract highly resolved features. Those features will be transferred to the expanding path. 
+    - At the end of the expanding path the model has learned to locate those features within the final image dimensions.
+
+    ![image20]
 ## Transfer Learning <a id="trans_learn"></a> 
-## Capsule Networks <a id="caps_net"></a>  
+- During training the network learns to extract features from the image. 
+- In early layers: simple features like, lines, edges, colours, simple geometries
+- In deep layers: textures, combinations of forms, parts of objects, etc. 
+- If the CNN  is deep enough and has been trained on a large enough and varied image set (to create different feature maps), feature maps could obtain a full library of visuel effects, which can be combined to form nearly every object.
+
+- Instead of training a network from scratch (high computational effort and time and data needed), take a pretrained model and adopt it to your needs.
+
+- A good candidate for transfer learning is VGG19. It has 19 layers. Hence, it is a really deep network. Keep the early layers and adopt the deeper layer or even only the classificator layers.
+
+- Open Jupyter Notebook ```transfer_learning_in_keras.ipynb```.
+    ### Load dependencies
+    ``` 
+    from keras.applications.vgg19 import VGG19
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+    from keras.preprocessing.image import ImageDataGenerator
+    ```
+    ### Load the pre-trained VGG19 model
+    ```
+    vgg19 = VGG19(include_top=False,
+              weights='imagenet',
+              input_shape=(224,224,3),
+              pooling=None)
+    ```
+    ### Freeze all the layers in the base VGGNet19 model, do not update VGG19 parameters during training
+    ```
+    for layer in vgg19.layers:
+        layer.trainable = False
+    ```
+    ### Add custom classification layers
+    ```
+    # Instantiate the sequential model and add the VGG19 model: 
+    model = Sequential()
+    model.add(vgg19)
+
+    # Add the custom layers (fully connected layers) at top of the VGG19 model
+    # Those layers are used for classification 
+    model.add(Flatten(name='flattened'))
+    model.add(Dropout(0.5, name='dropout'))
+    model.add(Dense(2, activation='softmax', name='predictions'))
+    ```
+    ### Compile the model for training
+    ```
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    ```
+    ### Prepare the data for training
+    ```
+    # download the data: 
+    ! wget -c https://www.dropbox.com/s/86r9z1kb42422up/hot-dog-not-hot-dog.tar.gz
+    ! tar -xzf hot-dog-not-hot-dog.tar.gz
+
+    # Instantiate two image generator classes:
+    # Useful class to load images with real time data augmentation
+    train_datagen = ImageDataGenerator(
+        rescale=1.0/255,
+        data_format='channels_last',
+        rotation_range=30,
+        horizontal_flip=True,
+        fill_mode='reflect')
+
+    valid_datagen = ImageDataGenerator(
+        rescale=1.0/255,
+        data_format='channels_last')
+
+    # Define the batch size:
+    batch_size=32
+
+    # Define the train and validation generators: 
+    train_generator = train_datagen.flow_from_directory(
+        directory='./hot-dog-not-hot-dog/train',
+        target_size=(224, 224),
+        classes=['hot_dog','not_hot_dog'],
+        class_mode='categorical',
+        batch_size=batch_size,
+        shuffle=True,
+        seed=42)
+
+    valid_generator = valid_datagen.flow_from_directory(
+        directory='./hot-dog-not-hot-dog/test',
+        target_size=(224, 224),
+        classes=['hot_dog','not_hot_dog'],
+        class_mode='categorical',
+        batch_size=batch_size,
+        shuffle=True,
+        seed=42)
+
+    RESULTS:
+    ------------
+    Found 498 images belonging to 2 classes.
+    Found 500 images belonging to 2 classes.    
+    ```
+    ### Train
+    ```
+    model.fit_generator(train_generator, steps_per_epoch=15, 
+                    epochs=16, validation_data=valid_generator, 
+                    validation_steps=15)
+    
+    RESULTS:
+    ------------
+    ...
+    Epoch 16/16
+    15/15 [==============================] - 4s - loss: 0.3248 - acc: 0.8472 - val_loss: 1.2689 - val_acc: 0.6261
+    ```
+    ### Some annotations:
+    - During loading VGG19: 
+        - **include_top=False** means that classificator layers from VGG19 should not be used.
+        - **weights='imagenet'** loads model parameters which were trained with the ImageNet data set (14 million entries).
+        - **input_shape=(224,224,3)** initializes the model with the correct input image size
+    - train_datagen: 
+        - rotates images randomly within 30°
+        - horizontally reflects images randomly
+        - scales data into a range between 0 and 1
+        - sets 'channels_last' format (channel dimension at the end, e.g. 224x224x3)
+    - valid_datagen:
+        - scales data into a range between 0 and 1
+        - sets 'channels_last' format (channel dimension at the end, e.g. 224x224x3)
+    - flow_from_directory() method: instructs the generartors to load the images from the provided directory.
+    - Only a few epochs needed for a reasonable training effect
+
+## Capsule Networks <a id="caps_net"></a> 
+- from 2017, Sara Sabour, Google-Brain-Team
+- The approach is an attempt to more closely mimic biological neural organization.
+- The idea is to add structures called “capsules” to a convolutional neural network (CNN), and to reuse output from several of those capsules to form more stable (with respect to various perturbations) representations for higher capsules. The output is a vector consisting of the probability of an observation, and a pose for that observation. This vector is similar to what is done for example when doing classification with localization in CNNs. 
+- at the moment: the computational effort is still too high.
 
 ## Setup Instructions <a id="Setup_Instructions"></a>
 The following is a brief set of instructions on setting up a cloned repository.
@@ -774,3 +931,9 @@ Further Resources
     - CNNs are used to [save endangered species](https://blogs.nvidia.com/blog/2016/11/04/saving-endangered-species/?adbsc=social_20170303_70517416)!
     - An app called [FaceApp](https://www.digitaltrends.com/photography/faceapp-neural-net-image-editing/) uses a CNN to make you smile in a picture or change genders.
 
+Recent publications
+* [R. Girshick et al, arXiv:1311.2524v5, 2014, Rich feature hierarchies for accurate object detection and semantic segmentation](https://arxiv.org/pdf/1311.2524.pdf)
+* [R. Girshick et al., arXiv:1504.08083v2, 2015, Fast R-CNN](https://arxiv.org/pdf/1504.08083.pdf)
+* [Shaoqing Ren et al., arXiv:1506.01497v3, 2016, Faster R-CNN: Towards Real-Time ObjectDetection with Region Proposal Networks](https://arxiv.org/pdf/1506.01497.pdf)
+* [J. Redmon et al., 2016, arXiv:1506.02640v5, You Only Look Once:Unified, Real-Time Object Detection](https://arxiv.org/pdf/1506.02640v5.pdf)
+* [Fei-Fei Li et al. 2017, Lecture 11:Detection and Segmentation](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf)
