@@ -213,7 +213,7 @@ Overview of Machine Vision techniques.
 In the following some important ConvNets will be presented.
 ## LeNet <a id="lenet"></a> 
 - Originally from 1998
-- Here LeNet with some modern implementations due to more computational power in these days
+- Below: LeNet with some modern implementations due to more computational power in these days
 - Open Jupyter Notebook ```lenet_in_keras.ipynb```
     ### Load dependencies
     ```
@@ -435,7 +435,7 @@ In the following some important ConvNets will be presented.
     Key points:
     - Input images: 224x224, RGB --> 3 color channels considered via input_shape of conv2d_1
     - conv2d_1 has a large kernel_size = 11x11
-    - Dropout is only used in for the fully connected layers near the output. Idea: Conv layers are less susceptible for overfitting than fully connected layers.
+    - Dropout is only used for the fully connected layers near the output. Idea: Conv layers are less susceptible to overfitting than fully connected layers.
 
     ![image10]
 
@@ -561,18 +561,18 @@ In the following some important ConvNets will be presented.
     ![image11]
 
 ## ResNet <a id="resnet"></a> 
-- ResNet architectures help to reduce the risk of **Vanishing Gradients**
-- Vanishing Gradients are remarkable for deep architectures
-- Reason: Parameter of earl layers are far away from cost function (source for gradients which will transported backward through the network)
-- Early layers (needed for simple feature detection) are difficult to train.
+- ResNet architectures help to reduce the risk of **Vanishing Gradients**.
+- Vanishing Gradients are remarkable for deep architectures.
+- Reason: Parameter of early layers are far away from cost function (source for gradients which will propagated backward through the network).
+- Due to Vanishing Gradients: Early layers (needed for simple feature detection) are difficult to train.
 
 ### Identity functions
-- If new layers execute an identity check (reproduction of results from earlier layers) training error does not increase.
-- However, often new layers have problems to execute this check. Hence, new layers could reduce the performance.
+- If new layers execute an identity check (reproduction of input data) the training error does not increase.
+- However, new layers have often problems to execute this check. Hence, adding new layers increases the risk to reduce the performance.
 
 ### Idea of ResNets:
 - Residual networks have residual connections which exist in so called **residual blocks**.
-- Residual blocks are based on a sequence like Convolution layers, Batchnormalization and ReLU activation which will be finalized by a residual connection.
+- Residual blocks are based on a sequence like Convolution layers, Batchnormalization and ReLU activation. Such a block will be finalized by a residual connection.
 - Input to residual block: a<sub>i-1</sub>.
 - Output from residual block (w/o residual connection): a<sub>i</sub>.
 - Output from residual block (with residual connection): y<sub>i</sub> = a<sub>i</sub> + a<sub>i-1</sub>.
@@ -583,14 +583,14 @@ In the following some important ConvNets will be presented.
     ![image12]
 
 ### ResNet from Microsoft Research
-- Developed by Microsoft research
-- Winner at ILSVRC 215
+- Developed by Microsoft research.
+- Winner at ILSVRC 215.
 - Used for 
     - image classification
     - object classification
     - image segmentation
-- Used with COCO data set
-- Gaining more information from data via deeper architectures
+- Used with COCO data set.
+- Gaining more information from data via deeper architectures.
 
 ## Object detection <a id="object_detection"></a> 
 - Let's focus on 
@@ -599,22 +599,23 @@ In the following some important ConvNets will be presented.
 
     ![image13]
    
-    - First **object detection** detects objects with boundary boxes
+    - First **object detection** detects objects with boundary boxes:
         - Identifies location of objects in an image
-        - image classification
+        - Classifies images
     - Then **image segmentation** can follow:
         - **Semantic segmentation**: identifies all object of a certain class
         - **Instance segmentation**: identifies all instances of one class 
 
 - Object detection in phases:
-    1. An interesting region will be identified
-    2. Automatic feature extraction in this region
-    3. Classification of this region
+    1. Identify regions of interest.
+    2. Automatically extract features in this region.
+    3. Classify objects in this region.
+
 - Examples: R-CNN, Fast R-CNN, Faster R C-NN, YOLO
 
 - Interseting reference: [R-CNN, Fast R-CNN, Faster R-CNN, YOLO — Object Detection Algorithms](https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e)
 
-- Recent publications
+- Recent publications:
     * [R. Girshick et al, arXiv:1311.2524v5, 2014, Rich feature hierarchies for accurate object detection and semantic segmentation](https://arxiv.org/pdf/1311.2524.pdf)
     * [R. Girshick et al., arXiv:1504.08083v2, 2015, Fast R-CNN](https://arxiv.org/pdf/1504.08083.pdf)
     * [Shaoqing Ren et al., arXiv:1506.01497v3, 2016, Faster R-CNN: Towards Real-Time ObjectDetection with Region Proposal Networks](https://arxiv.org/pdf/1506.01497.pdf)
@@ -624,9 +625,9 @@ In the following some important ConvNets will be presented.
 
 ### R-CNN <a id="r_cnn"></a> 
 - From 2013 (Ross Girshnick, UC Berkeley)
-- Copied from attention mechanism of human brain
-- Fast Scan and then Focus: 
-    1. Selective search for regions of interest (ROIs)
+- Copied from attention mechanism of human brains
+- First Scan and then Focus: 
+    1. Apply a selective search for regions of interest (ROIs)
     2. Extract features from ROIs via CNN
     3. Use two traditional Machine Learning aproaches **Linear regression** and **Support Vector Machins** in order to refine the location of boundary boxes and to classify objects within this boxes.  
 
@@ -638,10 +639,10 @@ In the following some important ConvNets will be presented.
 
 ### Fast R-CNN <a id="fast_r_cnn"></a> 
 - From 2015 (Ross Girshnick, UC Berkeley)
-- In normal R-CNN: In step 2 the CNN algorithm runs through multiple times for each ROI --> Unnecessary step
+- In a normal R-CNN: The CNN algorithm of step 2 is repeated multiple times for each ROI --> Unnecessary
 - Here: 
-    - Step 1 as in R-CNN
-    - Step 2: CNN takes a single look at the whole image and extracted features are used simultaneously for all ROIs. Last layer of CNN draws a vector of features. 
+    - Step 1: Do the same as in R-CNN.
+    - Step 2: CNN takes a single look at the whole image and extracted features are simultaneously used for all ROIs. Last layer of CNN draws a vector of features. 
     - Step 3: Fully connected network, input: feature vector and ROIs. This network learns to concentrate only on features in ROIs and outputs:
         - A Softmax probability over object classes
         - A boundary box regressor (to refine the location of ROI)
@@ -650,7 +651,7 @@ In the following some important ConvNets will be presented.
     ![image16]
 
 ### Faster R-CNN <a id="faster_r_cnn"></a> 
-- from 2015 (Shaoqing Ren, Microsoft Research)
+- From 2015 (Shaoqing Ren, Microsoft Research)
 - Main bottle neck in R-CNN and Fast R-CNN: **search for ROIs**
 - Main idea here: 
     - Use feature activation map of CNN from step 2 to search for ROIs. 
@@ -663,7 +664,7 @@ In the following some important ConvNets will be presented.
     ![image17]
 
 ### YOLO <a id="yolo"></a> 
-- from 2015 (Joseph Redmon)
+- From 2015 (Joseph Redmon)
 - Problem: Even Faster R-CNN concentrates more on single ROIs than on the whole image.
 - New idea: **You Only Look Once** (YOLO)
 - Main steps:
@@ -688,7 +689,7 @@ In the following some important ConvNets will be presented.
     - U-Net
 
 ### Mask R-CNN <a id="mask_r_cnn"></a> 
-- from 2017, developed by Facebook AI Research (FAIR)
+- From 2017, developed by Facebook AI Research (FAIR)
 - Recent publication: [Kaiming He et al., 2018, arXiv:1703.06870v3, Mask R-CNN](https://arxiv.org/pdf/1703.06870.pdf)
 
     ![image19]
@@ -697,13 +698,13 @@ In the following some important ConvNets will be presented.
     - Use an exisitng Faster R-CNN architecture to propose ROIs.
     - Use a ROI classificator to classify the objects. Simultaneously, use this classificator to refine boundary boxes.
     - Use the boundary box to detect parts from the feature maps, which correspond to those parts of the image.
-    - Transfer these ROI feature maps in a complete ConvNet. It outputs a mask which marks the pixels which belong to the image. Object pixels will be set to 1. Non object pixels will be set to 0.  
+    - Transfer these ROI feature maps to a complete ConvNet. It outputs a mask which marks the pixels which belong to the image. Object pixels will be set to 1. Non object pixels will be set to 0.  
 
 ### U-Net <a id="u_net"></a> 
-- from 2015, R. Ronneberger (University Freiburg)
+- From 2015, R. Ronneberger (University Freiburg)
 - Image segmentation of biomedical images. 
 - It sconsists of a complete Convolutional architecture. 
-    - Starts with a **contracting path**, multiple Conv and Maxpolling layers. Feature activation maps get smaller but deeper
+    - Starts with a **contracting path**, multiple Conv and Maxpolling layers. Feature activation maps get smaller but deeper.
     - Then there is an **expanding path**, multiple upsampling and convolutional steps which transform feature activation maps back to original resolution.
     - Contracting and expanding path are symmetric. During the contracting path the model learns to extract highly resolved features. Those features will be transferred to the expanding path. 
     - At the end of the expanding path the model has learned to locate those features within the final image dimensions.
@@ -711,7 +712,7 @@ In the following some important ConvNets will be presented.
     ![image20]
 ## Transfer Learning <a id="trans_learn"></a> 
 - During training the network learns to extract features from the image. 
-- In early layers: simple features like, lines, edges, colours, simple geometries
+- In early layers: simple features like, lines, edges, colours, simple geometries.
 - In deep layers: textures, combinations of forms, parts of objects, etc. 
 - If the CNN  is deep enough and has been trained on a large enough and varied image set (to create different feature maps), feature maps could obtain a full library of visuel effects, which can be combined to form nearly every object.
 
@@ -830,10 +831,10 @@ In the following some important ConvNets will be presented.
     - Only a few epochs needed for a reasonable training effect
 
 ## Capsule Networks <a id="caps_net"></a> 
-- from 2017, Sara Sabour, Google-Brain-Team
+- From 2017, Sara Sabour, Google-Brain-Team.
 - The approach is an attempt to more closely mimic biological neural organization.
 - The idea is to add structures called “capsules” to a convolutional neural network (CNN), and to reuse output from several of those capsules to form more stable (with respect to various perturbations) representations for higher capsules. The output is a vector consisting of the probability of an observation, and a pose for that observation. This vector is similar to what is done for example when doing classification with localization in CNNs. 
-- at the moment: the computational effort is still too high.
+- At the moment: The computational effort is still too high.
 
 ## Setup Instructions <a id="Setup_Instructions"></a>
 The following is a brief set of instructions on setting up a cloned repository.
