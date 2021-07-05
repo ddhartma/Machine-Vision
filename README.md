@@ -57,7 +57,7 @@ Overview of Machine Vision techniques.
         - [Fast R-CNN](#fast_r_cnn)
         - [Faster R-CNN](#faster_r_cnn)
         - [YOLO](#yolo)
-    - [Picture Segmentation](#pic_seg)
+    - [Image Segmentation](#pic_seg)
         - [Mask R-CNN](#mask_r_cnn)
         - [U-Net](#u_net)
     - [Transfer Learning](#trans_learn)
@@ -595,25 +595,84 @@ In the following some important ConvNets will be presented.
 - Gaining more information from data via deeper architectures
 
 ## Object detection <a id="object_detection"></a> 
-- Before we studied image classification
-- Now et's focus on 
+- Let's focus on 
     - object detection
     - image segmentation
 
     ![image14]
     Abb. 10-13
 
-    - First object detection detects objects with boundary boxes
-    - Image segmentation
-        - Semantic segmentation: identifies all object of a certain class
-        - Instance segmentation: identifies all instances of one class 
+    - First **object detection** detects objects with boundary boxes
+        - Identifies location of objects in an image
+        - image classification
+    - Then **image segmentation** can follow:
+        - **Semantic segmentation**: identifies all object of a certain class
+        - **Instance segmentation**: identifies all instances of one class 
 
+- Object detection in phases:
+    1. An interesting region will be identified
+    2. Automatic feature extraction in this region
+    3. Classification of this region
+- Exampls: R-CNN, Fast R-CNN, Faster R C-NN, YOLO
 
 ### R-CNN <a id="r_cnn"></a> 
+- From 2013 (Ross Girshnick, UC Berkeley)
+- Copied from attention mechanism of human brain
+- Fast Scan and then Focus: 
+    1. Selective search for regions of interest (ROIs)
+    2. Extract features from ROIs via CNN
+    3. Use two traditional Machine Learning aproaches **Linear regression** and **Support Vector Machins** in order to refine the location of boundary boxes and to classify objects within this boxes.  
+
+- Limitations: 
+    - inflexible, only one input image size
+    - slow, high computing effort (multi steps process see above)
+
 ### Fast R-CNN <a id="fast_r_cnn"></a> 
+- From 2015 (Ross Girshnick, UC Berkeley)
+- In normal R-CNN: In step 2 the CNN algorithm runs through multiple times for each ROI --> Unnecessary step
+- Here: 
+    - Step 1 as in R-CNN
+    - Step 2: CNN takes a single look at the whole image and extracted features are used simultaneously for all ROIs. Last layer of CNN draws a vector of features. 
+    - Step 3: Fully connected network, input: feature vector and ROIs. This network learns to concentrate only on features in ROIs and outputs:
+        - A Softmax probability over object classes
+        - A boundary box regressor (to refine the location of ROI)
+- Main benefit over R-CNN: **Feature extraction only one time** --> faster, reduction of computational effort, simpler architecture
+
 ### Faster R-CNN <a id="faster_r_cnn"></a> 
+- from 2015 (Shaoqing Ren, Microsoft Research)
+- Main bottle neck in R-CNN and Fast R-CNN: **search for ROIs**
+- Main idea here: 
+    - Use feature activation map of CNN from step 2 to search for ROIs. 
+    - Those feature activation maps contain a lot of image context information.
+    - Each map has two dimensions, hence a feature location is posible. 
+    - If a convolutional layer contains 16 filter, then the whole activation map contains of 16 maps, which together describe the location of sixteen features of the input image. 
+    - Hence, You can now identify **what** is on that image and **where** it is.
+- Benefit: Only one CNN for object detection and classification. --> faster, further reduction of computational effort than for Fast R-CNN.
+
+    ![image15]
+    Abb. 10-6
+
+    ![image16]
+    Abb. 10-14
+
 ### YOLO <a id="yolo"></a> 
-## Picture Segmentation <a id="pic_seg"></a> 
+- from 2015 (Joseph Redmon)
+- Problem: Even Faster R-CNN concentrates more on single ROIs than on the whole image.
+- New idea: **You Only Look Once** (YOLO)
+- Main steps:
+    - Use a pretrained CNN.
+    - Divide the image into series of cells.
+    - Predict for each cell a number of boundary boxes and classification probabilities.
+    - Select boundary boxes with classification probabilities (you must set a threshold).
+    - Combine boundary boxes with classification probabilities to detect and locate objects.
+- For a better imagination: YOLO combines a large number of smaller boundary boxes, but only if this combination results in a reasonable high probability for an object class.
+- Benefit: YOLO is faster then Faster R-CNN
+- Problem: YOLO has problems to identify small objects precisely.  
+- Ongoing improvements:
+    - YOLO9000: improvements in speed and modeling accuracy
+    - Yolov3: further improvement in speed and accuracy
+
+## Image Segmentation <a id="pic_seg"></a> 
 ### Mask R-CNN <a id="mask_r_cnn"></a> 
 ### U-Net <a id="u_net"></a> 
 ## Transfer Learning <a id="trans_learn"></a> 
